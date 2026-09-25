@@ -19,7 +19,7 @@ class HasilController extends Controller
     public function index(Request $request): RedirectResponse
     {
         $aktif = $request->user()->laporanDitugaskan()
-            ->whereIn('status', ['ditugaskan', 'dikerjakan'])
+            ->where('status', 'dikerjakan')
             ->orderBy('assigned_at')
             ->first();
 
@@ -35,7 +35,7 @@ class HasilController extends Controller
     public function edit(Request $request, Laporan $laporan): View
     {
         abort_unless($laporan->isAssignedTo($request->user()), 403);
-        abort_unless(in_array($laporan->status, ['ditugaskan', 'dikerjakan'], true), 404);
+        abort_unless($laporan->status === 'dikerjakan', 404);
 
         return view('teknisi.form_hasil', [
             'laporan' => $laporan,
@@ -45,7 +45,7 @@ class HasilController extends Controller
     public function update(Request $request, Laporan $laporan): RedirectResponse
     {
         abort_unless($laporan->isAssignedTo($request->user()), 403);
-        abort_unless(in_array($laporan->status, ['ditugaskan', 'dikerjakan'], true), 404);
+        abort_unless($laporan->status === 'dikerjakan', 404);
 
         $data = $request->validate([
             'inspection_result' => ['required', 'string'],
