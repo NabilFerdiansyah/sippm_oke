@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Laporan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class LaporanController extends Controller
@@ -34,7 +33,6 @@ class LaporanController extends Controller
             'urgency' => ['required', 'in:tinggi,sedang,rendah'],
             'condition_text' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            'photo_before' => ['nullable', 'image', 'max:4096'],
         ], [
             'station.required' => 'Stasiun wajib dipilih.',
             'machine.required' => 'Mesin wajib dipilih.',
@@ -43,9 +41,6 @@ class LaporanController extends Controller
             'condition_text.required' => 'Kondisi/Abnormalitas wajib dipilih.',
             'description.required' => 'Deskripsi masalah wajib diisi.',
         ]);
-
-        $photoBefore = $request->file('photo_before');
-        unset($data['photo_before']);
 
         abort_unless(in_array($data['machine'], config("sippm.station_machines.{$data['station']}", []), true), 422, 'Mesin tidak sesuai dengan stasiun yang dipilih.');
         abort_unless(in_array($data['condition_text'], config("sippm.condition_options.{$data['machine']}.{$data['category']}", []), true), 422, 'Kondisi/abnormalitas tidak sesuai dengan mesin dan kategori yang dipilih.');
@@ -56,10 +51,6 @@ class LaporanController extends Controller
             'operator_id' => $request->user()->id,
             'status' => 'menunggu_validasi',
         ]);
-
-        if ($photoBefore) {
-            $laporan->update(['photo_before' => $photoBefore->store('laporan/sebelum', 'public')]);
-        }
 
         $laporan->recordActivity($request->user(), 'dibuat', null, 'menunggu_validasi', 'Laporan dibuat oleh Operator.');
 
@@ -104,7 +95,6 @@ class LaporanController extends Controller
         abort_unless(in_array($data['condition_text'], config("sippm.condition_options.{$data['machine']}.{$data['category']}", []), true), 422, 'Kondisi/abnormalitas tidak sesuai dengan mesin dan kategori yang dipilih.');
 
         $oldStatus = $laporan->status;
-        $oldPhoto = $laporan->photo_before;
         $laporan->update([
             ...$data,
             'status' => 'menunggu_validasi',
@@ -112,14 +102,6 @@ class LaporanController extends Controller
             'manager_id' => null,
             'validated_at' => null,
         ]);
-
-        if ($request->hasFile('photo_before')) {
-            $path = $request->file('photo_before')->store('laporan/sebelum', 'public');
-            $laporan->update(['photo_before' => $path]);
-            if ($oldPhoto) {
-                Storage::disk('public')->delete($oldPhoto);
-            }
-        }
 
         $laporan->recordActivity($request->user(), 'direvisi', $oldStatus, 'menunggu_validasi', 'Laporan diperbaiki dan dikirim ulang oleh Operator.');
 
