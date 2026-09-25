@@ -99,9 +99,9 @@
               <td>{{ $activity->user->name ?? 'Sistem' }}</td>
               <td>{{ ucfirst(str_replace('_', ' ', $activity->action)) }}</td>
               <td>
-                {{ $activity->from_status ? AppModelsLaporan::statusOptions()[$activity->from_status] ?? $activity->from_status : '-' }}
+                {{ $activity->from_status ? \App\Models\Laporan::statusOptions()[$activity->from_status] ?? $activity->from_status : '-' }}
                 @if ($activity->to_status)
-                  → {{ AppModelsLaporan::statusOptions()[$activity->to_status] ?? $activity->to_status }}
+                  → {{ \App\Models\Laporan::statusOptions()[$activity->to_status] ?? $activity->to_status }}
                 @endif
               </td>
               <td>{{ $activity->description ?: '-' }}</td>
