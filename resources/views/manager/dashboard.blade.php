@@ -68,7 +68,7 @@
             @elseif ($l->status === 'menunggu_penugasan')
               <a class="btn btn-primary btn-sm" href="{{ route('manager.laporan.penugasan', $l) }}">Tugaskan</a>
             @else
-              <a class="btn btn-outline btn-sm" href="{{ route('manager.histori', ['cari' => $l->kode]) }}">Lihat</a>
+              <a class="btn btn-outline btn-sm" href="{{ route('manager.laporan.show', $l) }}">Lihat</a>
             @endif
           </td>
         </tr>
