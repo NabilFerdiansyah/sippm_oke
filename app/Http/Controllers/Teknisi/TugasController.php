@@ -29,6 +29,8 @@ class TugasController extends Controller
             'started_at' => now(),
         ]);
 
+        $laporan->recordActivity($request->user(), 'dimulai', 'ditugaskan', 'dikerjakan', 'Teknisi memulai pemeriksaan.');
+
         return redirect()
             ->route('teknisi.tugas.hasil.edit', $laporan)
             ->with('success', 'Pemeriksaan dimulai. Silakan isi hasil penanganan setelah selesai.');
