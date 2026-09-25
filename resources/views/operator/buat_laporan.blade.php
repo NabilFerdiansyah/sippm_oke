@@ -26,7 +26,7 @@
             <select id="reportStation" name="station" onchange="onStationChange()" required>
               <option value="" selected disabled>Pilih stasiun</option>
               @foreach ($stationLabels as $key => $label)
-                <option value="{{ $key }}" {{ old('station') === $key ? 'selected' : '' }}>{{ $label }}</option>
+                <option value="{{ $key }}" {{ old('station', $laporan?->station) === $key ? 'selected' : '' }}>{{ $label }}</option>
               @endforeach
             </select>
           </div>
