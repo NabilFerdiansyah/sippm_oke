@@ -103,6 +103,7 @@
   const STATION_MACHINES = @json($stationMachines);
   const CONDITION_OPTIONS = @json($conditionOptions);
   const OLD_MACHINE = @json(old('machine', $laporan?->machine));
+  const OLD_CONDITION = @json(old('condition_text', $laporan?->condition_text));
 
   function updateConditionOptions(){
     const machineSelect = document.getElementById('reportMachine');
@@ -114,6 +115,7 @@
       const o = document.createElement('option');
       o.textContent = opt;
       o.value = opt;
+      if (opt === OLD_CONDITION) o.selected = true;
       condSelect.appendChild(o);
     });
   }
@@ -144,7 +146,7 @@
       machineSelect.value = OLD_MACHINE;
     }
     refreshEnhancedSelect('reportMachineCsel');
-    if (document.getElementById('reportStation').value) onStationChange(); else updateConditionOptions();
+    updateConditionOptions();
   }
 
   document.querySelectorAll('#urgencyToggle .urg-opt').forEach(opt => {
@@ -155,6 +157,6 @@
     });
   });
 
-  updateConditionOptions();
+  if (document.getElementById('reportStation').value) onStationChange(); else updateConditionOptions();
 </script>
 @endsection
