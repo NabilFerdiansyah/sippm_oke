@@ -31,13 +31,6 @@
       <div style="font-size:13.5px;">{{ $laporan->description }}</div>
     </div>
 
-    @if ($laporan->photo_before)
-      <div style="margin-top:16px;">
-        <div class="k" style="font-size:12px;color:var(--ink-soft);margin-bottom:8px;">Foto Kondisi Kerusakan</div>
-        <a href="{{ asset('storage/'.$laporan->photo_before) }}" target="_blank" class="photo-swatch">Lihat foto sebelum perbaikan</a>
-      </div>
-    @endif
-
     @if ($laporan->status === 'ditolak')
       <div class="callout danger" style="margin-top:18px;">
         <b>Alasan Penolakan:</b> {{ $laporan->rejection_reason }}
