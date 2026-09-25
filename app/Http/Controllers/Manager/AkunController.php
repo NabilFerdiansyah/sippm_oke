@@ -88,8 +88,11 @@ class AkunController extends Controller
         ]);
     }
 
-    public function resetPassword(User $user): RedirectResponse
+    public function resetPassword(Request $request, User $user): RedirectResponse
     {
+        abort_unless(in_array($user->role, ['operator', 'teknisi'], true), 403);
+        abort_unless($user->id !== $request->user()->id, 403);
+
         $tempPassword = $this->generateTempPassword();
 
         $user->update([
@@ -104,8 +107,19 @@ class AkunController extends Controller
             ->with('temp_password', $tempPassword);
     }
 
-    public function toggleStatus(User $user): RedirectResponse
+    public function toggleStatus(Request $request, User $user): RedirectResponse
     {
+        abort_unless(in_array($user->role, ['operator', 'teknisi'], true), 403);
+        abort_unless($user->id !== $request->user()->id, 403);
+
+        if ($user->is_active && $user->role === 'teknisi') {
+            $activeAssignments = $user->laporanDitugaskan()
+                ->whereIn('status', ['ditugaskan', 'dikerjakan', 'menunggu_validasi_akhir'])
+                ->count();
+
+            abort_if($activeAssignments > 0, 422, 'Teknisi tidak dapat dinonaktifkan karena masih memiliki tugas maintenance aktif.');
+        }
+
         $user->update(['is_active' => ! $user->is_active]);
 
         $status = $user->is_active ? 'diaktifkan' : 'dinonaktifkan';
