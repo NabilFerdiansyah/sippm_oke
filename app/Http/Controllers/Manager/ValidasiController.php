@@ -29,6 +29,8 @@ class ValidasiController extends Controller
             'validated_at' => now(),
         ]);
 
+        $laporan->recordActivity($request->user(), 'divalidasi', 'menunggu_validasi', 'menunggu_penugasan', 'Laporan diterima oleh Manager.');
+
         return redirect()
             ->route('manager.laporan.penugasan', $laporan)
             ->with('success', "Laporan {$laporan->kode} diterima. Silakan tugaskan teknisi.");
@@ -50,6 +52,8 @@ class ValidasiController extends Controller
             'validated_at' => now(),
             'rejection_reason' => $data['rejection_reason'],
         ]);
+
+        $laporan->recordActivity($request->user(), 'ditolak', 'menunggu_validasi', 'ditolak', $data['rejection_reason']);
 
         return redirect()
             ->route('manager.dashboard')
