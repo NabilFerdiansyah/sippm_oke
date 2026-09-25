@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('from_status', 50)->nullable();
             $table->string('to_status', 50)->nullable();
             $table->text('description')->nullable();
-            $table->json('metadata')->nullable();
+            $table->text('metadata')->nullable();
             $table->timestamps();
 
             $table->index(['laporan_id', 'created_at']);
