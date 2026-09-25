@@ -44,6 +44,8 @@ Route::middleware(['auth', 'force.password.change'])->group(function () {
         Route::get('/dashboard', [OperatorDashboardController::class, 'index'])->name('dashboard');
         Route::get('/laporan/buat', [LaporanController::class, 'create'])->name('laporan.create');
         Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
+        Route::get('/laporan/{laporan}/edit', [LaporanController::class, 'edit'])->name('laporan.edit');
+        Route::put('/laporan/{laporan}', [LaporanController::class, 'update'])->name('laporan.update');
         Route::get('/laporan/{laporan}', [LaporanController::class, 'show'])->name('laporan.show');
     });
 
@@ -51,6 +53,7 @@ Route::middleware(['auth', 'force.password.change'])->group(function () {
     Route::prefix('manager')->name('manager.')->middleware('role:manager')->group(function () {
         Route::get('/dashboard', [ManagerDashboardController::class, 'index'])->name('dashboard');
 
+        Route::get('/laporan/{laporan}', [\App\Http\Controllers\Manager\LaporanController::class, 'show'])->name('laporan.show');
         Route::get('/laporan/{laporan}/validasi', [ValidasiController::class, 'show'])->name('laporan.validasi');
         Route::post('/laporan/{laporan}/validasi/setujui', [ValidasiController::class, 'approve'])->name('laporan.validasi.approve');
         Route::post('/laporan/{laporan}/validasi/tolak', [ValidasiController::class, 'reject'])->name('laporan.validasi.reject');
