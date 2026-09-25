@@ -149,6 +149,11 @@
     updateConditionOptions();
   }
 
+  const initialUrgency = document.getElementById('reportUrgency').value;
+  document.querySelectorAll('#urgencyToggle .urg-opt').forEach(opt => {
+    opt.classList.toggle('on', opt.dataset.val === initialUrgency);
+  });
+
   document.querySelectorAll('#urgencyToggle .urg-opt').forEach(opt => {
     opt.addEventListener('click', () => {
       document.querySelectorAll('#urgencyToggle .urg-opt').forEach(o => o.classList.remove('on'));
