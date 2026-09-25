@@ -88,7 +88,6 @@ class LaporanController extends Controller
             'urgency' => ['required', 'in:tinggi,sedang,rendah'],
             'condition_text' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            'photo_before' => ['nullable', 'image', 'max:4096'],
         ]);
 
         abort_unless(in_array($data['machine'], config("sippm.station_machines.{$data['station']}", []), true), 422, 'Mesin tidak sesuai dengan stasiun yang dipilih.');
