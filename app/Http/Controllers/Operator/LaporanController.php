@@ -44,6 +44,9 @@ class LaporanController extends Controller
             'description.required' => 'Deskripsi masalah wajib diisi.',
         ]);
 
+        $photoBefore = $request->file('photo_before');
+        unset($data['photo_before']);
+
         $laporan = Laporan::create([
             ...$data,
             'kode' => Laporan::generateKode(),
