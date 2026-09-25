@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Laporan Kerusakan / Abnormalitas Mesin Giling.
@@ -85,6 +86,23 @@ class Laporan extends Model
     public function teknisi(): BelongsTo
     {
         return $this->belongsTo(User::class, 'technician_id');
+    }
+
+    public function activities(): HasMany
+    {
+        return $this->hasMany(LaporanActivity::class)->latest();
+    }
+
+    public function recordActivity(?User $user, string $action, ?string $fromStatus = null, ?string $toStatus = null, ?string $description = null, array $metadata = []): LaporanActivity
+    {
+        return $this->activities()->create([
+            'user_id' => $user?->id,
+            'action' => $action,
+            'from_status' => $fromStatus,
+            'to_status' => $toStatus,
+            'description' => $description,
+            'metadata' => $metadata ?: null,
+        ]);
     }
 
     // ------------------------------------------------------------------
