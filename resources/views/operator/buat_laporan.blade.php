@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('crumb', 'Operator')
-@section('pageTitle', 'Buat Laporan Kerusakan')
-@section('heroTitle', 'Buat Laporan Kerusakan')
+@section('pageTitle', $editing ? 'Revisi Laporan Kerusakan' : 'Buat Laporan Kerusakan')
+@section('heroTitle', $editing ? 'Revisi Laporan Kerusakan' : 'Buat Laporan Kerusakan')
 @section('heroSub', 'Isi detail gangguan mesin selengkap mungkin agar Manager dapat menindaklanjuti dengan cepat dan tepat.')
 @section('heroBadge', auth()->user()->roleSubLabel())
 
@@ -13,8 +13,9 @@
   <div class="callout danger">{{ $errors->first() }}</div>
 @endif
 
-<form method="POST" action="{{ route('operator.laporan.store') }}" id="formBuatLaporan">
+<form method="POST" action="{{ $editing ? route('operator.laporan.update', $laporan) : route('operator.laporan.store') }}" id="formBuatLaporan" enctype="multipart/form-data">
   @csrf
+  @if ($editing) @method('PUT') @endif
   <div class="panel">
     <div class="panel-head"><h3>Form Laporan Kerusakan / Abnormalitas</h3></div>
     <div class="panel-body">
@@ -42,17 +43,17 @@
         </div>
         <div class="field">
           <label for="fld_TanggalKejadian_2">Tanggal Kejadian</label>
-          <input id="fld_TanggalKejadian_2" type="date" name="incident_date" value="{{ old('incident_date', now()->toDateString()) }}" required>
+          <input id="fld_TanggalKejadian_2" type="date" name="incident_date" value="{{ old('incident_date', $laporan?->incident_date?->toDateString() ?? now()->toDateString()) }}" required>
         </div>
         <div class="field">
           <label for="fld_WaktuKejadian_3">Waktu Kejadian</label>
-          <input id="fld_WaktuKejadian_3" type="time" name="incident_time" value="{{ old('incident_time', now()->format('H:i')) }}" required>
+          <input id="fld_WaktuKejadian_3" type="time" name="incident_time" value="{{ old('incident_time', $laporan ? substr($laporan->incident_time, 0, 5) : now()->format('H:i')) }}" required>
         </div>
         <div class="field">
           <label>Kategori Gangguan</label>
           <select id="reportCategory" name="category" onchange="updateConditionOptions()">
             @foreach ($categoryLabels as $key => $label)
-              <option value="{{ $key }}" {{ old('category') === $key ? 'selected' : '' }}>
+              <option value="{{ $key }}" {{ old('category', $laporan?->category) === $key ? 'selected' : '' }}>
                 {{ ['mekanik' => '⚙️ ', 'elektrik' => '⚡ ', 'instrumentasi' => '🎛️ ', 'proses' => '🧪 '][$key] ?? '' }}{{ $label }}
               </option>
             @endforeach
@@ -60,7 +61,7 @@
         </div>
         <div class="field">
           <label>Tingkat Urgensi</label>
-          <input type="hidden" name="urgency" id="reportUrgency" value="{{ old('urgency', 'tinggi') }}">
+          <input type="hidden" name="urgency" id="reportUrgency" value="{{ old('urgency', $laporan?->urgency ?? 'tinggi') }}">
           <div class="urgency-toggle" id="urgencyToggle">
             <div class="urg-opt sel-rendah" data-val="rendah">Rendah</div>
             <div class="urg-opt sel-sedang" data-val="sedang">Sedang</div>
@@ -74,7 +75,18 @@
         </div>
         <div class="field span2">
           <label>Deskripsi Masalah</label>
-          <textarea name="description" required>{{ old('description') }}</textarea>
+          <textarea name="description" required>{{ old('description', $laporan?->description) }}</textarea>
+        </div>
+        <div class="field span2">
+          <label>Foto Sebelum Perbaikan / Kondisi Kerusakan</label>
+          <label class="upload-box">
+            <input type="file" name="photo_before" accept="image/*" onchange="handleUploadBoxChange(this)">
+            <button type="button" class="upload-remove" onclick="event.preventDefault();clearUploadBox(this)">✕</button>
+            <span class="upload-content">📷 Unggah foto kondisi kerusakan</span>
+          </label>
+          @if ($editing && $laporan?->photo_before)
+            <span class="hint">Foto sebelumnya tersedia. Unggah foto baru hanya jika ingin menggantinya.</span>
+          @endif
         </div>
       </div>
       <div class="action-bar">
@@ -90,6 +102,7 @@
 <script>
   const STATION_MACHINES = @json($stationMachines);
   const CONDITION_OPTIONS = @json($conditionOptions);
+  const OLD_MACHINE = @json(old('machine', $laporan?->machine));
 
   function updateConditionOptions(){
     const machineSelect = document.getElementById('reportMachine');
@@ -127,8 +140,11 @@
       machineSelect.appendChild(o);
     });
 
+    if (OLD_MACHINE && machines.includes(OLD_MACHINE)) {
+      machineSelect.value = OLD_MACHINE;
+    }
     refreshEnhancedSelect('reportMachineCsel');
-    updateConditionOptions();
+    if (document.getElementById('reportStation').value) onStationChange(); else updateConditionOptions();
   }
 
   document.querySelectorAll('#urgencyToggle .urg-opt').forEach(opt => {
