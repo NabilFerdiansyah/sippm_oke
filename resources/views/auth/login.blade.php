@@ -45,9 +45,6 @@
           <button class="btn btn-amber" type="submit" style="justify-content:center;margin-top:4px;width:100%;">Masuk</button>
           <div class="login-note">Menu &amp; dashboard yang tampil akan menyesuaikan peran akun yang login.</div>
         </form>
-        <div class="callout" style="margin-top:16px;">
-          Akun demo &mdash; Operator: <b>andi.operator</b>, Manager: <b>sri.manager</b>, Teknisi: <b>budi.teknisi</b> (kata sandi: <b>password123</b>)
-        </div>
       </div>
       <div class="login-foot-copy">&copy; {{ date('Y') }} PG Rendeng &middot; Sinergi Gula Nusantara</div>
     </div>
