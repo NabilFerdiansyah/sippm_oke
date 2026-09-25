@@ -13,7 +13,7 @@
   <div class="callout danger">{{ $errors->first() }}</div>
 @endif
 
-<form method="POST" action="{{ $editing ? route('operator.laporan.update', $laporan) : route('operator.laporan.store') }}" id="formBuatLaporan" enctype="multipart/form-data">
+<form method="POST" action="{{ $editing ? route('operator.laporan.update', $laporan) : route('operator.laporan.store') }}" id="formBuatLaporan">
   @csrf
   @if ($editing) @method('PUT') @endif
   <div class="panel">
@@ -76,17 +76,6 @@
         <div class="field span2">
           <label>Deskripsi Masalah</label>
           <textarea name="description" required>{{ old('description', $laporan?->description) }}</textarea>
-        </div>
-        <div class="field span2">
-          <label>Foto Sebelum Perbaikan / Kondisi Kerusakan</label>
-          <label class="upload-box">
-            <input type="file" name="photo_before" accept="image/*" onchange="handleUploadBoxChange(this)">
-            <button type="button" class="upload-remove" onclick="event.preventDefault();clearUploadBox(this)">✕</button>
-            <span class="upload-content">📷 Unggah foto kondisi kerusakan</span>
-          </label>
-          @if ($editing && $laporan?->photo_before)
-            <span class="hint">Foto sebelumnya tersedia. Unggah foto baru hanya jika ingin menggantinya.</span>
-          @endif
         </div>
       </div>
       <div class="action-bar">
