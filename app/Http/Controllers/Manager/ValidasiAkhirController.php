@@ -33,6 +33,8 @@ class ValidasiAkhirController extends Controller
             'final_validated_at' => now(),
         ]);
 
+        $laporan->recordActivity($request->user(), 'diselesaikan', 'menunggu_validasi_akhir', 'selesai', 'Hasil penanganan disetujui oleh Manager.');
+
         return redirect()
             ->route('manager.dashboard')
             ->with('success', "Laporan {$laporan->kode} disetujui dan dinyatakan selesai.");
@@ -53,6 +55,8 @@ class ValidasiAkhirController extends Controller
             'final_manager_note' => $data['final_manager_note'],
             'submitted_for_validation_at' => null,
         ]);
+
+        $laporan->recordActivity($request->user(), 'dikembalikan', 'menunggu_validasi_akhir', 'ditugaskan', $data['final_manager_note']);
 
         return redirect()
             ->route('manager.dashboard')
