@@ -15,8 +15,16 @@ class PenugasanController extends Controller
     {
         abort_unless($laporan->status === 'menunggu_penugasan', 404);
 
+        $expectedSkills = match ($laporan->category) {
+            'mekanik' => ['Mekanik'],
+            'elektrik' => ['Elektrik'],
+            'instrumentasi' => ['Instrumentasi'],
+            default => ['Mekanik', 'Elektrik', 'Instrumentasi'],
+        };
+
         $teknisiList = User::where('role', 'teknisi')
             ->where('is_active', true)
+            ->whereIn('bagian', $expectedSkills)
             ->orderBy('name')
             ->get();
 
