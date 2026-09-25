@@ -29,10 +29,6 @@ class HasilController extends Controller
                 ->with('warning', 'Tidak ada tugas aktif saat ini untuk diisi hasil penanganannya.');
         }
 
-        if ($aktif->status === 'ditugaskan') {
-            $aktif->update(['status' => 'dikerjakan', 'started_at' => $aktif->started_at ?? now()]);
-        }
-
         return redirect()->route('teknisi.tugas.hasil.edit', $aktif);
     }
 
@@ -76,6 +72,8 @@ class HasilController extends Controller
             'started_at' => $laporan->started_at ?? now(),
             'submitted_for_validation_at' => now(),
         ]);
+
+        $laporan->recordActivity($request->user(), 'dikirim_validasi', 'dikerjakan', 'menunggu_validasi_akhir', 'Hasil penanganan dikirim untuk validasi akhir Manager.');
 
         return redirect()
             ->route('teknisi.dashboard')
