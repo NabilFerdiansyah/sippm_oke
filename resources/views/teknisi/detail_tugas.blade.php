@@ -28,13 +28,6 @@
     <div style="margin-top:14px;font-size:13.5px;">
       <strong>Deskripsi Masalah:</strong> {{ $laporan->description }}
     </div>
-    @if ($laporan->photo_before)
-      <div style="margin-top:14px;">
-        <div class="k" style="font-size:12px;color:var(--ink-soft);margin-bottom:8px;">Foto Kondisi Kerusakan</div>
-        <a href="{{ asset('storage/'.$laporan->photo_before) }}" target="_blank" class="photo-swatch">Lihat foto sebelum perbaikan</a>
-      </div>
-    @endif
-
     @if ($laporan->status === 'ditugaskan')
       <form method="POST" action="{{ route('teknisi.tugas.mulai', $laporan) }}">
         @csrf
