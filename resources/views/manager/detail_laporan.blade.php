@@ -36,7 +36,9 @@
     @if ($laporan->photo_before)
       <div style="margin-top:16px;">
         <div class="k" style="font-size:12px;color:var(--ink-soft);margin-bottom:8px;">Foto Sebelum Perbaikan</div>
-        <a href="{{ asset('storage/'.$laporan->photo_before) }}" target="_blank" class="photo-swatch">Lihat dokumentasi foto sebelum</a>
+        <a href="{{ asset('storage/'.$laporan->photo_before) }}" target="_blank" class="photo-swatch">
+          <img src="{{ asset('storage/'.$laporan->photo_before) }}" alt="Foto sebelum perbaikan {{ $laporan->kode }}">
+        </a>
       </div>
     @endif
 
@@ -82,7 +84,9 @@
       @if ($laporan->photo_after)
         <div style="margin-top:16px;">
           <div class="k" style="font-size:12px;color:var(--ink-soft);margin-bottom:8px;">Foto Setelah Perbaikan</div>
-          <a href="{{ asset('storage/'.$laporan->photo_after) }}" target="_blank" class="photo-swatch">Lihat dokumentasi foto sesudah</a>
+          <a href="{{ asset('storage/'.$laporan->photo_after) }}" target="_blank" class="photo-swatch">
+            <img src="{{ asset('storage/'.$laporan->photo_after) }}" alt="Foto setelah perbaikan {{ $laporan->kode }}">
+          </a>
         </div>
       @endif
     @endif
