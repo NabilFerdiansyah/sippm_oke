@@ -42,7 +42,9 @@
       <div class="k" style="font-size:12px;color:var(--ink-soft);margin-bottom:8px;">Dokumentasi</div>
       <div class="photo-row">
         @if ($laporan->photo_after)
-          <a href="{{ asset('storage/'.$laporan->photo_after) }}" target="_blank" class="photo-swatch">{{ basename($laporan->photo_after) }}</a>
+          <a href="{{ asset('storage/'.$laporan->photo_after) }}" target="_blank" class="photo-swatch">
+            <img src="{{ asset('storage/'.$laporan->photo_after) }}" alt="Foto setelah perbaikan {{ $laporan->kode }}">
+          </a>
         @else
           <span class="hint">Tidak ada foto dilampirkan.</span>
         @endif
