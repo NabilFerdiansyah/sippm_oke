@@ -50,7 +50,7 @@ class HasilController extends Controller
         $data = $request->validate([
             'inspection_result' => ['required', 'string'],
             'root_cause' => ['required', 'string', 'max:255'],
-            'action_taken' => ['required', 'string', 'max:255'],
+            'action_taken' => ['required', 'string'],
             'components_text' => ['nullable', 'string'],
             'work_end_time' => ['required'],
             'additional_note' => ['nullable', 'string'],
