@@ -51,15 +51,19 @@ class HasilController extends Controller
             'inspection_result' => ['required', 'string'],
             'root_cause' => ['required', 'string', 'max:255'],
             'action_taken' => ['required', 'string'],
-            'components_text' => ['nullable', 'string'],
+            'components_text' => ['required', 'string'],
             'work_end_time' => ['required'],
-            'additional_note' => ['nullable', 'string'],
-            'photo_after' => ['nullable', 'image', 'max:4096'],
+            'additional_note' => ['required', 'string'],
+            'photo_after' => ['required', 'image', 'max:4096'],
         ], [
             'inspection_result.required' => 'Hasil pemeriksaan wajib diisi.',
             'root_cause.required' => 'Penyebab kerusakan wajib diisi.',
             'action_taken.required' => 'Tindakan yang dilakukan wajib diisi.',
             'work_end_time.required' => 'Waktu selesai penanganan wajib diisi.',
+            'components_text.required' => 'Komponen yang diganti/diperiksa wajib diisi.',
+            'additional_note.required' => 'Catatan tambahan wajib diisi.',
+            'photo_after.required' => 'Foto setelah perbaikan wajib diunggah.',
+            'photo_after.image' => 'File foto setelah perbaikan harus berupa gambar.',
         ]);
 
         if ($request->hasFile('photo_after')) {
