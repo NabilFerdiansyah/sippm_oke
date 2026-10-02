@@ -33,8 +33,8 @@
           <input id="fld_TindakanyangDilakukan_18" type="text" name="action_taken" value="{{ old('action_taken', $laporan->action_taken) }}" required>
         </div>
         <div class="field span2">
-          <label>Komponen yang Diganti / Diperiksa</label>
-          <textarea name="components_text" placeholder="Tuliskan komponen yang diperiksa atau diganti, sertakan jumlah bila perlu...">{{ old('components_text', $laporan->components_text) }}</textarea>
+          <label>Komponen yang Diganti / Diperiksa <span aria-hidden="true">*</span></label>
+          <textarea name="components_text" required placeholder="Tuliskan komponen yang diperiksa atau diganti, sertakan jumlah bila perlu...">{{ old('components_text', $laporan->components_text) }}</textarea>
           <span class="hint">Diisi bebas dalam bentuk deskripsi, tidak perlu dipilih dari daftar</span>
         </div>
         <div class="field">
@@ -42,13 +42,13 @@
           <input id="fld_WaktuSelesaiPenanganan_19" type="time" name="work_end_time" value="{{ old('work_end_time', $laporan->work_end_time ?? now()->format('H:i')) }}" required>
         </div>
         <div class="field span2">
-          <label>Catatan Tambahan</label>
-          <textarea name="additional_note" placeholder="Opsional...">{{ old('additional_note', $laporan->additional_note) }}</textarea>
+          <label>Catatan Tambahan <span aria-hidden="true">*</span></label>
+          <textarea name="additional_note" required placeholder="Tuliskan catatan tambahan...">{{ old('additional_note', $laporan->additional_note) }}</textarea>
         </div>
         <div class="field">
-          <label>Foto Setelah Perbaikan</label>
+          <label>Foto Setelah Perbaikan <span aria-hidden="true">*</span></label>
           <label class="upload-box">
-            <input type="file" name="photo_after" accept="image/*" onchange="handleUploadBoxChange(this)">
+            <input type="file" name="photo_after" accept="image/*" required onchange="handleUploadBoxChange(this)">
             <button type="button" class="upload-remove" onclick="event.preventDefault();clearUploadBox(this)">✕</button>
             <span class="upload-content">📷 Unggah foto</span>
           </label>
